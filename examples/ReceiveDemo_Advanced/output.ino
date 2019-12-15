@@ -2,28 +2,25 @@ static const char* bin2tristate(const char* bin);
 static char * dec2binWzerofill(unsigned long long Dec, unsigned int bitLength);
 
 void output(unsigned long long decimal, unsigned int length, unsigned int delay, unsigned int* raw, unsigned int protocol) {
-  if (decimal == 0) {
-    Serial.print("Unknown encoding.");
-  } else {
-    const char* b = dec2binWzerofill(decimal, length);
-    char buffer[100];
-    Serial.print("Decimal: ");
-    sprintf(buffer, "%0ld", decimal/1000000L);
-    Serial.print(buffer);  
-    sprintf(buffer, "%0ld", decimal%1000000L);
-    Serial.print(buffer);
-    Serial.print(" (");
-    Serial.print( length );
-    Serial.print("Bit) Binary: ");
-    Serial.print( b );
-    Serial.print(" Tri-State: ");
-    Serial.print( bin2tristate( b) );
-    Serial.print(" PulseLength: ");
-    Serial.print(delay);
-    Serial.print(" microseconds");
-    Serial.print(" Protocol: ");
-    Serial.println(protocol);
-  }
+
+  const char* b = dec2binWzerofill(decimal, length);
+  char buffer[100];
+  Serial.print("Decimal: ");
+  sprintf(buffer, "%0ld", decimal/1000000L);
+  Serial.print(buffer);  
+  sprintf(buffer, "%0ld", decimal%1000000L);
+  Serial.print(buffer);
+  Serial.print(" (");
+  Serial.print( length );
+  Serial.print("Bit) Binary: ");
+  Serial.print( b );
+  Serial.print(" Tri-State: ");
+  Serial.print( bin2tristate( b) );
+  Serial.print(" PulseLength: ");
+  Serial.print(delay);
+  Serial.print(" microseconds");
+  Serial.print(" Protocol: ");
+  Serial.println(protocol);
   
   Serial.print("Raw data: ");
   for (unsigned int i=0; i<= length*2; i++) {

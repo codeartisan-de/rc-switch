@@ -496,7 +496,7 @@ void RCSwitch::send(unsigned long long code, unsigned int length) {
     this->disableReceive();
   }
 #endif
-  
+
   for (int nRepeat = 0; nRepeat < nRepeatTransmit; nRepeat++) {
     for (int i = length-1; i >= 0; i--) {
       if (code & (1LL << i))
@@ -506,7 +506,7 @@ void RCSwitch::send(unsigned long long code, unsigned int length) {
     }
     this->transmit(protocol.syncFactor);
   }
-  
+
   // Disable transmit after sending (i.e., for inverted protocols)
   digitalWrite(this->nTransmitterPin, LOW);
 
