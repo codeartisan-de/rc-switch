@@ -79,7 +79,7 @@ static const RCSwitch::Protocol PROGMEM proto[] = {
   { 380, {  1,  6 }, {  1,  3 }, {  3,  1 }, false },    // protocol 4
   { 500, {  6, 14 }, {  1,  2 }, {  2,  1 }, false },    // protocol 5
   { 450, { 23,  1 }, {  1,  2 }, {  2,  1 }, true },     // protocol 6 (HT6P20B)
-  { 650, {  1, 10 }, {  1,  2 }, {  2,  1 }, true }      // protocol 7 (Mandolyn/Lidl TR-502MSV/RC-402/RC-402DX): https://github.com/sui77/rc-switch/pull/55
+  { 636, {  1, 10 }, {  1,  2 }, {  2,  1 }, true },     // protocol 7 (Mandolyn/Lidl TR-502MSV/RC-402/RC-402DX): https://github.com/sui77/rc-switch/pull/55
 };
 
 enum {
@@ -496,6 +496,11 @@ void RCSwitch::send(unsigned long code, unsigned int length) {
   }
 #endif
 
+//  if (protocol.invertedSignal) {
+//	  // for "low starting" (and therefore "high ending") protocols set the transmitter back to low (no signal).
+//	  digitalWrite(this->nTransmitterPin, HIGH);
+//  }
+
   for (int nRepeat = 0; nRepeat < nRepeatTransmit; nRepeat++) {
     for (int i = length-1; i >= 0; i--) {
       if (code & (1L << i))
@@ -504,6 +509,11 @@ void RCSwitch::send(unsigned long code, unsigned int length) {
         this->transmit(protocol.zero);
     }
     this->transmit(protocol.syncFactor);
+  }
+
+  if (protocol.invertedSignal) {
+	  // for "low starting" (and therefore "high ending") protocols set the transmitter back to low (no signal).
+	  digitalWrite(this->nTransmitterPin, LOW);
   }
 
 #if not defined( RCSwitchDisableReceiving )
